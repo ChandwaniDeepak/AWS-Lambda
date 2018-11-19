@@ -45,7 +45,7 @@ public class LogEvent implements RequestHandler<SNSEvent, Object> {
         try {
             context.getLogger().log("trying to connect to dynamodb");
             init();
-            long unixTime = Instant.now().getEpochSecond()+20*60;
+            long unixTime = Instant.now().getEpochSecond()+20*60; //ttl 20 mins
             Table table = dynamoDB.getTable("csye6225");
             if(table == null)
             context.getLogger().log("table is culprit");
@@ -70,19 +70,10 @@ public class LogEvent implements RequestHandler<SNSEvent, Object> {
                             AmazonSimpleEmailServiceClientBuilder.standard()
                                     .withRegion(Regions.US_EAST_1).build();
                     SendEmailRequest req = new SendEmailRequest()
-                            .withDestination(
-                                    new Destination()
-                                            .withToAddresses(TO))
-                            .withMessage(
-                                    new Message()
-                                            .withBody(
-                                                    new Body()
-                                                            .withHtml(
-                                                                    new Content()
-                                                                            .withCharset(
-                                                                                    "UTF-8")
+                            .withDestination(new Destination().withToAddresses(TO))
+                            .withMessage(new Message().withBody(new Body().withHtml(new Content().withCharset("UTF-8")
                                                                             .withData(
-                                                                                    "Please click on the below link to reset the password<br/>"+
+                                                                                    "My Name is Deepak Chandwani and below is your passowrd reset email<br/>"+
                                                                                             "<p><a href='#'>https://"+domain+"/resetPwd?email="+TO+"&token="+token+"</a></p>"))
                                             )
                                             .withSubject(
@@ -109,7 +100,7 @@ public class LogEvent implements RequestHandler<SNSEvent, Object> {
             context.getLogger().log("Request ID:     " + ase.getRequestId());
         }
         catch (AmazonClientException ace) {
-            context.getLogger().log("Internal error occured communicating with DynamoDB");
+            context.getLogger().log("Internal error while communicating with DynamoDB");
             context.getLogger().log("Error Message:  " + ace.getMessage());
         }
         catch(Exception e){

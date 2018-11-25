@@ -20,7 +20,7 @@ import java.util.Calendar;
 public class LogEvent implements RequestHandler<SNSEvent, Object> {
 
     static DynamoDB dynamoDB;
-    String domain = "csye6225-fall2018-chandwanid.me";
+    String domain = "web-app.csye6225-fall2018-chandwanid.me";
 
     @Value("${bucket.name}")
     private String bucketName;
